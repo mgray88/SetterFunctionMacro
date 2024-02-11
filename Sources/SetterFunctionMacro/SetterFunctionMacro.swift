@@ -73,8 +73,9 @@ public struct SetterFunctionMacro: PeerMacro {
                 }
 
                 if !binding.accessors.isEmpty {
+                    let kinds: [TokenKind] = [.keyword(.set), .keyword(.willSet), .keyword(.didSet)]
                     guard binding.accessors.contains(where: { accessor in
-                        accessor.accessorSpecifier.tokenKind == .keyword(.set)
+                        kinds.contains(accessor.accessorSpecifier.tokenKind)
                     }) else {
                         throw SetterFunctionError.computed
                     }

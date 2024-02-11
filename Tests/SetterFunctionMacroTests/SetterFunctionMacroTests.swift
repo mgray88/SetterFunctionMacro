@@ -129,4 +129,31 @@ final class SetterFunctionMacroTests: XCTestCase {
             """
         }
     }
+
+    func testSetListeners() throws {
+        assertMacro {
+            """
+            @setterFunction
+            public var textAppearance: TextAppearance = .Default {
+                didSet {
+                    styled(with: textAppearance)
+                }
+            }
+            """
+        } expansion: {
+            """
+            public var textAppearance: TextAppearance = .Default {
+                didSet {
+                    styled(with: textAppearance)
+                }
+            }
+
+            @discardableResult
+            public func textAppearance(_ text: TextAppearance) -> Self {
+                self.textAppearance = textAppearance
+                return self
+            }
+            """
+        }
+    }
 }
