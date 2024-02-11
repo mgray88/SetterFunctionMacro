@@ -5,47 +5,52 @@ import PackageDescription
 import CompilerPluginSupport
 
 let package = Package(
-    name: "DslAccessorMacro",
+    name: "SetterFunctionMacro",
     platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "DslAccessorMacro",
-            targets: ["DslAccessorMacro"]
+            name: "SetterFunctionMacro",
+            targets: ["SetterFunction"]
         ),
         .executable(
-            name: "DslAccessorMacroClient",
-            targets: ["DslAccessorMacroClient"]
+            name: "SetterFunctionMacroClient",
+            targets: ["SetterFunctionMacroClient"]
         ),
     ],
     dependencies: [
         // Depend on the Swift 5.9 release of SwiftSyntax
         .package(url: "https://github.com/apple/swift-syntax.git", from: "509.0.0"),
+        .package(url: "https://github.com/stackotter/swift-macro-toolkit", from: "0.3.1"),
+        .package(url: "https://github.com/pointfreeco/swift-macro-testing", from: "0.2.2"),
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
         // Macro implementation that performs the source transformation of a macro.
         .macro(
-            name: "DslAccessorMacroMacros",
+            name: "SetterFunctionMacro",
             dependencies: [
                 .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-                .product(name: "SwiftCompilerPlugin", package: "swift-syntax")
+                .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                .product(name: "MacroToolkit", package: "swift-macro-toolkit"),
             ]
         ),
 
         // Library that exposes a macro as part of its API, which is used in client programs.
-        .target(name: "DslAccessorMacro", dependencies: ["DslAccessorMacroMacros"]),
+        .target(name: "SetterFunction", dependencies: ["SetterFunctionMacro"]),
 
         // A client of the library, which is able to use the macro in its own code.
-        .executableTarget(name: "DslAccessorMacroClient", dependencies: ["DslAccessorMacro"]),
+        .executableTarget(name: "SetterFunctionMacroClient", dependencies: ["SetterFunction"]),
 
         // A test target used to develop the macro implementation.
         .testTarget(
-            name: "DslAccessorMacroTests",
+            name: "SetterFunctionMacroTests",
             dependencies: [
-                "DslAccessorMacroMacros",
+                "SetterFunctionMacro",
                 .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+                .product(name: "MacroToolkit", package: "swift-macro-toolkit"),
+                .product(name: "MacroTesting", package: "swift-macro-testing")
             ]
         ),
     ]
