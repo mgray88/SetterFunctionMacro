@@ -86,7 +86,7 @@ public struct SetterFunctionMacro: PeerMacro {
                     .map { $0.name.text + " " }
 
                 var function = try FunctionDeclSyntax(
-                    "\(raw: access ?? "")func \(raw: identifier)(_ text: \(raw: type.normalizedDescription)) -> Self"
+                    "\(raw: access ?? "")func \(raw: identifier)(_ \(raw: identifier): \(raw: type.normalizedDescription)) -> Self"
                 ) {
                     "self.\(raw: identifier) = \(raw: identifier)"
                     "return self"

@@ -149,7 +149,7 @@ final class SetterFunctionMacroTests: XCTestCase {
             }
 
             @discardableResult
-            public func textAppearance(_ text: TextAppearance) -> Self {
+            public func textAppearance(_ textAppearance: TextAppearance) -> Self {
                 self.textAppearance = textAppearance
                 return self
             }
